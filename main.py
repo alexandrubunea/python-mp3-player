@@ -27,8 +27,9 @@ def save_settings(settings):
     open('settings.cfg', 'w').close() # Erase all the settings from the .cfg file
 
     with open('settings.cfg', 'w') as cfg_file:
-        cfg_file.write("SCREEN_WIDTH=" + settings['SCREEN_WIDTH'] + "\n")
-        cfg_file.write("SCREEN_HEIGHT=" + settings['SCREEN_HEIGHT'] + "\n")
+        for variable in settings:
+            value = settings[variable]
+            cfg_file.write(variable + "=" + value + "\n")
 
 def window_change_size(event, settings):
     settings['SCREEN_WIDTH'] = str(event.width)
@@ -36,7 +37,7 @@ def window_change_size(event, settings):
 
 def exit_application(root, settings):
     save_settings(settings)
-
+    
     root.destroy()
 
 def main():
@@ -50,6 +51,8 @@ def main():
     root.maxsize(config.APPLICATION_MAX_WIDTH, config.APPLICATION_MAX_HEIGHT)
     root.minsize(config.APLICATION_MIN_WIDTH, config.APLICATION_MIN_HEIGHT)
     root.geometry(settings['SCREEN_WIDTH'] + "x" + settings['SCREEN_HEIGHT'])
+
+    root['bg'] = config.APPLICATION_BACKGROUND_COLOR
 
     # Events
     root.bind('<Configure>', lambda event : window_change_size(event, settings))
